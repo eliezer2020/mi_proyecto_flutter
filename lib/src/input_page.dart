@@ -11,7 +11,11 @@ class InputPageState extends State<InputPage> {
   String _email = "";
   String _password = "";
   TextEditingController _inputDate = new TextEditingController();
-  String _fechaText ="";
+  String _fechaText = "";
+  String _controlvalue ="estudiante";
+
+  //drodown menu
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,9 +23,7 @@ class InputPageState extends State<InputPage> {
         title: Text("input page"),
       ),
       body: ListView(
-        
         padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 30.0),
-        
         children: <Widget>[
           _crearInput(),
           Divider(),
@@ -31,7 +33,17 @@ class InputPageState extends State<InputPage> {
           Divider(),
           _crearFecha(context),
           Divider(),
-          _mostrarPersona(),
+
+          Row(children: <Widget>[
+            Icon(Icons.content_paste, color: Colors.black45,),
+            Text("categoria:"),
+            SizedBox(width: 30.0,),
+            _combobox(context),
+          ],),
+          
+          Divider(),
+          _mostrarPersona()
+          ,
         ],
       ),
     );
@@ -67,12 +79,21 @@ class InputPageState extends State<InputPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         ListTile(
-        title: Text("Datos guardados",style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),),
-      ),
-      Text("""Nombre: $_nombre
+          title: Text(
+            "Datos guardados",
+            style: TextStyle(
+                fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
+          ),
+        ),
+        Text(
+          """Nombre: $_nombre
       Email:  $_email
       Pass:   $_password
-      fecha   $_fechaText""", textAlign: TextAlign.center,),
+      categoria:  $_controlvalue
+      """,
+          textAlign: TextAlign.center,
+        ),
+        Text("  fecha   $_fechaText"),
       ],
     );
   }
@@ -104,7 +125,7 @@ class InputPageState extends State<InputPage> {
       //iniciar teclado
       autofocus: false,
       obscureText: true,
-      
+
       onChanged: (inputdata) {
         setState(() {
           _password = inputdata;
@@ -128,48 +149,63 @@ class InputPageState extends State<InputPage> {
       autofocus: false,
       keyboardType: TextInputType.datetime,
       controller: _inputDate,
-      onTap: (){
+      onTap: () {
         //desabilitar enfoque al texfield
         FocusScope.of(context).requestFocus(new FocusNode());
-      _selectFecha(context);
+        _selectFecha(context);
       },
+
+      decoration: InputDecoration(
+        labelText: "bithday",
+        hintText: "Escribe fecha de nacimiento ",
+        icon: Icon(Icons.date_range),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(15.0),
+        ),
+      ),
+    );
+  }
+
+  _selectFecha(BuildContext context) async {
+    DateTime fecha = await showDatePicker(
+      context: context,
+      initialDate: new DateTime.now(),
+      firstDate: new DateTime(
+        1995,
+      ),
+      lastDate: new DateTime.now(),
+      //idoma del picker
+      locale: Locale("es", "ES"),
+    );
+
+    if (fecha != null) {
+      setState(() {
+        _fechaText = fecha.toString();
+        _inputDate.text = _fechaText;
+      });
+    }
+  }
+
+  Widget _combobox(BuildContext context) {
+    
+    List<DropdownMenuItem<String>> myitems = new List();
+    List<String> opcionesdropdown = ["estudiante", "maestro", "administrativo"];
+
+    opcionesdropdown.forEach((item) {
+      myitems.add(DropdownMenuItem(
+        child: Text(item.toString()),
+        value: item,
+      ));
+    });
+
+    return DropdownButton(items: myitems,
+    value: _controlvalue,
+     onChanged: (item) {
       
-           
-           
-            decoration: InputDecoration(
-              labelText: "bithday",
-              hintText: "Escribe fecha de nacimiento ",
-              icon: Icon(Icons.date_range),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(15.0),
-              ),
-             
-            ),
-          );
-          
-        }
-      
-        _selectFecha(BuildContext context) async {
-            DateTime fecha = await showDatePicker(context: context,
-             initialDate: new DateTime.now(), 
-             firstDate: new DateTime(1995, ), 
-             lastDate: new DateTime.now(),
-             //idoma del picker
-             locale: Locale("es","ES"),
-              );
+      setState(() {
+        _controlvalue= item;
 
-             if(fecha!=null)
-             {
-               setState(() {
-                  _fechaText = fecha.toString();
-                  _inputDate.text = _fechaText;
-
-               });
-               
-             }
-
-
-        }
-
-  
+      });
+    });
+  }
 }

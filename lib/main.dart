@@ -8,12 +8,18 @@ import 'package:mi_proyecto/src/home_page.dart';
 import 'package:mi_proyecto/src/input_page.dart';
 //import 'package:mi_proyecto/src/home_temp.dart';
 
+//support languajes
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:mi_proyecto/src/list_page.dart';
+import 'package:mi_proyecto/src/slider_page.dart';
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(context) {
     return MaterialApp(
+
       debugShowCheckedModeBanner: false,
       // home: HomePage(),
       initialRoute: "home",
@@ -25,7 +31,24 @@ class MyApp extends StatelessWidget {
         "card": (context) => CardPage(),
         "container": (context )=> AnimatedContainerClass(),
         "inputs": (context) => InputPage(),
+        "slider": (context) => SliderPage(),
+        "listpage": (context) => ListPage(), 
+
       },
+
+
+      //languaje support
+      localizationsDelegates: [
+   // ... app-specific localization delegate[s] here
+   GlobalMaterialLocalizations.delegate,
+   GlobalWidgetsLocalizations.delegate,
+   GlobalCupertinoLocalizations.delegate,
+ ],
+ supportedLocales: [
+    const Locale('en'), // English
+    const Locale('es'), // spanish
+ ],
+   
     );
   }
 }

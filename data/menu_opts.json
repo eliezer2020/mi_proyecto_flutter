@@ -27,6 +27,18 @@
             "ruta": "inputs",
             "icon": "input",
             "texto": "Input_page"
+        },
+
+        {
+            "ruta": "slider",
+            "icon": "slider",
+            "texto": "slider_page"
+        },
+
+        {
+            "ruta": "listpage",
+            "icon": "listpage",
+            "texto": "list_page"
         }
     ]
 }
